@@ -1,0 +1,32 @@
+.balancebackground{
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 1rem;
+    width: 32rem;
+    height: 6rem;
+    background: white;
+    box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+}
+@media only screen and (max-width: 900px) {
+    .balancebackground{
+        width: 12rem;
+        font-size: .5rem;
+        height: 4rem;
+    }
+    .balancebackground p{
+        font-size: .4rem;
+    }
+    .balancebackground h1{
+        line-height: .4rem;
+    }
+    .h1{
+
+    }
+}
+.balancebackground h1{
+    line-height: 1rem;
+}
