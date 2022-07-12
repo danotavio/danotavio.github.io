@@ -168,22 +168,24 @@ EnhancedTableHead.propTypes = {
 };
 
 const EnhancedTableToolbar = () => {
-  return}
+  return
+};
 
 export default function EnhancedTable() {
-  const [open, setOpen] = React.useState(false);
   const [post, setPost] = React.useState([]);
+  const [open, setOpen] = React.useState(false);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
+  const [paymentType, setPaymentType] = React.useState('');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [dialogAdvance, setDialogAdvance] = React.useState(false);
   
-  React.useState( () => {
+  React.useEffect( () => {
     const fetchPosts = async () => {
       try {
         const response = await api.get();
         setPost(response.data);
-        console.log(post)
       }
       catch(err) {
         if(err.response){
@@ -193,34 +195,29 @@ export default function EnhancedTable() {
           console.log(`Error: ${err.message}`)
         }
       }
-    };
+    }
     fetchPosts();
   },[]);
   
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - post.length) : 0;
+  page > 0 ? Math.max(0, (1 + page) * rowsPerPage - post.length) : 0;
   
   const handleClickOpen = () => {
-      setOpen(true);
+    setOpen(true);
   };
-
+  
   const handleClose = () => {
-      setOpen(false);
-      setDialogAdvance(false);
+    setOpen(false);
+    setDialogAdvance(false);
   };
-
-  const [paymentType, setPaymentType] = React.useState('');
 
   const handleChange = (event) => {
     setPaymentType(event.target.value);
   }
 
-const [dialogAdvance, setDialogAdvance] = React.useState(false);
-
-const changeModal = () => {
-  setDialogAdvance(true);
-}
-
+  const changeModal = () => {
+    setDialogAdvance(true);
+  }
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -236,9 +233,6 @@ const changeModal = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-
-  // Avoid a layout jump when reaching the last page with empty rows.
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -317,10 +311,14 @@ const changeModal = () => {
         <Paper sx={{ width: '100%', mb: 2 }}>
             <EnhancedTableToolbar />
             <TableContainer>
-                <div style={{display:'flex', alignItems:'center',justifyContent:'center', gap:'3rem', padding: '1rem' , flexDirection: 'row'}}>
+                <div style={{display:'flex', alignItems:'center',justifyContent:'center', gap:'8rem', padding: '1rem' , flexDirection: 'row'}}>
+                  <div style={{display: 'flex', alignItems:'center',justifyContent:'flex-start',flexDirection:'row', width:"100vw", gap:'2rem'}}>
                     <Input id="allSearch" type="text" placeholder="Pesquisar Data" variant="filled" endAdornment={ <InputAdornment position="end"> <SearchIcon /> </InputAdornment> } />       
                     <Input id="searchDate" type="date" placeholder="Pesquisar Data" variant="standard" endAdornment={ <InputAdornment position="end"> <CalendarMonthIcon /> </InputAdornment> }/>
-                    <Button style={{background:'#FF7E2E'}} variant="contained" onClick={handleClickOpen}> Adicionar Saldo </Button>
+                  </div>
+                    <div style={{display: 'flex', alignItems:'center',justifyContent:'flex-end',flexDirection:'row', width:"100vw"}}>
+                      <Button style={{background:'#FF7E2E'}} variant="contained" onClick={handleClickOpen}> Adicionar Saldo </Button>
+                    </div>
                 </div>
                 <Table
                     sx={{ minWidth: 750 }}
@@ -342,18 +340,18 @@ const changeModal = () => {
                             <TableCell style={{paddingLeft:'1rem'}}
                             component="th"
                             scope="row"
-                            padding="none">
+                            padding="none"
+                            >
                             {post.id}
                             </TableCell>
-                            <TableCell align="left" key={post.destiny}></TableCell>
-                            <TableCell align="left" key={post.value}></TableCell>
-                            <TableCell align="left" key={post.requestDate}></TableCell>
-                            <TableCell align="left" key={post.paymentMethod}></TableCell>
-                            <TableCell align="left"key={post.dueDate}></TableCell>
-                            <TableCell align="left"key={post.status}></TableCell>
+                            <TableCell align="left">{post.destiny}</TableCell>
+                            <TableCell align="left">{post.value}</TableCell>
+                            <TableCell align="left">{post.requestDate}</TableCell>
+                            <TableCell align="left">{post.paymentMethod}</TableCell>
+                            <TableCell align="left">{post.dueDate}</TableCell>
+                            <TableCell align="left">{post.status}</TableCell>
                             <TableCell align="left"><IconButton><QrCodeIcon/></IconButton></TableCell>
                             <TableCell align="left"><IconButton><ContentCopyIcon/></IconButton></TableCell>
-                            
                         </TableRow>
                     );
                     })}
