@@ -14,7 +14,7 @@ import Input from '@mui/material/Input';
 import Button from '@mui/material/Button';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SearchIcon from '@mui/icons-material/Search';
-import { InputAdornment } from '@mui/material';
+import { Chip, InputAdornment } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import QrCodeIcon from '@mui/icons-material/QrCode';
@@ -28,6 +28,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import MenuItem from '@mui/material/MenuItem';
 import PixCode from '../images/pixcodepx.png'
 import api from './services/api';
+
 
 const paymentMethods = [ 
     {
@@ -186,6 +187,7 @@ export default function EnhancedTable() {
       try {
         const response = await api.get();
         setPost(response.data);
+        
       }
       catch(err) {
         if(err.response){
@@ -199,6 +201,18 @@ export default function EnhancedTable() {
     fetchPosts();
   },[]);
   
+  const handleChangeStatus = (status) => {
+    if (status == 'status 1'){
+      return 'success'
+    }
+    if(status == 'status 2'){
+      return 'secondary'
+    }
+    if(status == 'status 3'){
+      return 'error'
+    }
+  }
+
   const emptyRows =
   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - post.length) : 0;
   
@@ -334,9 +348,9 @@ export default function EnhancedTable() {
                 <TableBody>
                     {stableSort( post , getComparator(order, orderBy))
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(() => {
+                    .map((post) => {
                     return (
-                        <TableRow>
+                        <TableRow key={post.id}>
                             <TableCell style={{paddingLeft:'1rem'}}
                             component="th"
                             scope="row"
@@ -349,7 +363,7 @@ export default function EnhancedTable() {
                             <TableCell align="left">{post.requestDate}</TableCell>
                             <TableCell align="left">{post.paymentMethod}</TableCell>
                             <TableCell align="left">{post.dueDate}</TableCell>
-                            <TableCell align="left">{post.status}</TableCell>
+                            <TableCell align="left"><Chip label={post.status} color={handleChangeStatus(post.status)}></Chip></TableCell>
                             <TableCell align="left"><IconButton><QrCodeIcon/></IconButton></TableCell>
                             <TableCell align="left"><IconButton><ContentCopyIcon/></IconButton></TableCell>
                         </TableRow>
